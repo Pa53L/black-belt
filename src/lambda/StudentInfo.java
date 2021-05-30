@@ -1,6 +1,10 @@
 package lambda;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.function.Predicate;
 
 public class StudentInfo {
 
@@ -11,30 +15,6 @@ public class StudentInfo {
             }
         }
     }
-
-//    void printStudentOverGrade(ArrayList<Student> al, double grade) {
-//        for (Student s : al) {
-//            if (s.avgGrade > grade) {
-//                System.out.println(s);
-//            }
-//        }
-//    }
-//
-//    void printStudentUnderAge(ArrayList<Student> al, int age) {
-//        for (Student s : al) {
-//            if (s.age < age) {
-//                System.out.println(s);
-//            }
-//        }
-//    }
-//
-//    void printStudentMixCondition(ArrayList<Student> al, int age, double grade, char sex) {
-//        for (Student s : al) {
-//            if (s.age > age && s.avgGrade < grade && s.sex == sex) {
-//                System.out.println(s);
-//            }
-//        }
-//    }
 }
 
 class Test {
@@ -53,21 +33,39 @@ class Test {
         students.add(st5);
 
         StudentInfo info = new StudentInfo();
-        info.testStudents(students, new CheckOverGrade());
-//        info.printStudentOverGrade(students, 8.0);
-//        System.out.println("============================");
-//        info.printStudentUnderAge(students, 21);
-//        System.out.println("============================");
-//        info.printStudentMixCondition(students, 19, 8.8, 'f');
+        Collections.sort(students, new Comparator<Student>() {
+            @Override
+            public int compare(Student s1, Student s2) {
+                return s1.course - s2.course;
+            }
+        });
+        System.out.println(students);
+
+        Collections.sort(students, (s1, s2) -> s1.age - s2.age);
+
+        System.out.println(students);
+
+        info.testStudents(students, s -> {
+            System.out.println("Hello from lambda!");
+            return s.avgGrade > 8.0;
+        });
+
+        System.out.println("============================");
+        StudentChecks sc = (Student s) -> s.sex == 'f';
+        info.testStudents(students, sc);
+        System.out.println("============================");
+        info.testStudents(students, s -> s.age < 21);
+        System.out.println("============================");
+        info.testStudents(students, (Student s) -> { return s.age > 19 && s.avgGrade < 8.8 && s.sex == 'f'; });
     }
 }
 
+@FunctionalInterface
 interface StudentChecks {
     boolean check(Student s);
 }
 
 class CheckOverGrade implements StudentChecks {
-
     @Override
     public boolean check(Student s) {
         return s.avgGrade > 8.0;
