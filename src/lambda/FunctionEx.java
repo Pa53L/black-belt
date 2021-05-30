@@ -34,6 +34,9 @@ class Test5 {
 
         Function<Student, Double> f = student -> student.avgGrade;
 
+        double res = avgOfSmth(students, student -> student.avgGrade);
+        System.out.println(res);
+
 
 
     }
