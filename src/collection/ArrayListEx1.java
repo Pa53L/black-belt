@@ -25,5 +25,6 @@ public class ArrayListEx1 {
         ArrayList<String> arrayList3 = new ArrayList<>(list);
         arrayList3.addAll(arrayList2);
         System.out.println(arrayList3);
+        arrayList3.add("newString");
     }
 }

@@ -1,7 +1,9 @@
 package stream;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,6 +33,30 @@ public class Test2 {
                 element.getAvgGrade() > 7.9 && element.age > 21)
                 .collect(Collectors.toList());
         System.out.println(l);
+        students = students.stream().sorted(Comparator.comparing(Student::getName)).collect(Collectors.toList());
+        System.out.println(students);
+
+        students.stream().map(el ->
+        {
+            el.setName(el.getName().toUpperCase(Locale.ROOT));
+            return el;
+        })
+                .filter(el -> el.getSex() == 'f')
+                .sorted((x, y) -> x.getAge() - y.getAge())
+                .forEach(el -> {
+                    System.out.println("Stream methods chaining: " + el);
+                });
+
+        Student first = students.stream().map(el ->
+        {
+            el.setName(el.getName().toUpperCase(Locale.ROOT));
+            return el;
+        })
+                .filter(el -> el.getSex() == 'f')
+                .sorted((x, y) -> x.getAge() - y.getAge())
+                .findFirst().get();
+
+        System.out.println(first);
     }
 }
 
